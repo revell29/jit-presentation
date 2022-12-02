@@ -1,0 +1,241 @@
+import { Component, useState } from "react";
+import { Head, Notes, themes, Footer, Steps, Split } from "mdx-deck";
+import { Box } from "theme-ui";
+
+import { CodeSurfer, CodeSurferColumns, Step } from "code-surfer";
+import { shadesOfPurple } from "@code-surfer/themes";
+
+import Image01 from "./images/image1.png";
+import Image02 from "./images/image2.png";
+import JbPos from "./images/jb-pos.png";
+import Swc from "./images/swc-vs.jpeg";
+import Layout from "./components/Layout.js";
+
+export const theme = {
+  ...themes.dark,
+  colors: {
+    ...themes.dark.colors,
+    primary: "#F9B100",
+    background: "#111111",
+  },
+};
+
+<Head>
+  <title>Jubelio Internal Testing</title>
+</Head>
+
+# Jubelio Internal Tools
+
+>
+
+>
+
+<code>(Press spacebar to continue)</code>
+
+---
+
+# What this talk is
+
+- ✅ What is JIT?
+- ✅ MVP Feature?
+- ✅ Latest Technology
+
+---
+
+# What is JIT?
+
+### Centralized Backend Tools for Jubelio Ecosystem
+
+<div
+  style={{
+    padding: "0 5rem",
+  }}
+>
+  <p style={{ maxWidth: "1000px", fontSize: "28px", fontStyle: "italic" }}>
+    With the increasing number of products in the Jubelio Ecosystem, the idea
+    was born to combine all the tools for the operational needs of each product
+    into one system. But more than that, in the future, this system is also
+    expected to support the needs of other divisions, like Sales or Partnership,
+    such as generating reports, analytics, and more.
+  </p>
+</div>
+
+---
+
+# MVP Features
+
+<div style={{ padding: "2 rem" }}>
+  <ul style={{ maxWidth: "1000px" }}>
+    <li>
+      Monitoring <br />
+      <p>
+        Monitor Order and Tenants in Jubelio to know more about the trend of the
+        Market
+      </p>
+    </li>
+    <li>
+      Operation <br />
+      <p>
+        One System to handle Operation for All Products in Jubelio Ecosystem
+      </p>
+    </li>
+    <li>
+      Security & Logging <br />
+      <p>
+        With the Latest Security Standard using API Gateway and MSAL Login.
+        Every action also recorded for Clarity
+      </p>
+    </li>
+  </ul>
+</div>
+
+>
+
+>
+
+---
+
+# Latest Technology
+
+- 🚀 Backend
+
+- 🎨 Frontend
+
+---
+
+# Backend
+
+<Steps>
+
+- API Gateway - Krakend
+
+- Redis
+
+- Mongodb
+
+- Fastify
+
+</Steps>
+
+---
+
+# Frontend
+
+<Steps>
+
+- Next JS
+
+- Zustand
+
+- React Query
+
+- CASL for Role & Scope
+
+</Steps>
+
+---
+
+<CodeSurfer theme={shadesOfPurple}>
+
+```js
+/**
+ * Please define your own Ability rules according to your app requirements.
+ */
+const defineRulesFor = (
+  subject: string,
+  roles: string[],
+  scope: string[],
+  _isDivisionAdmin: boolean
+) => {
+  const { can, rules } = new AbilityBuilder(AppAbility);
+
+  if (roles.some((role) => role === "superadmin")) {
+    can("manage", "all");
+  } else {
+    scope.forEach((sc) => {
+      const [action, subject] = sc.split(":");
+      can(subject, action);
+    });
+    can("read", "home");
+  }
+  return rules;
+};
+```
+
+```js
+const UserPage: NextPage = () => {
+  return <div> User Page </div>;
+};
+
+UserPage.acl = {
+  action: "read",
+  subject: "usermanage",
+};
+
+export default UserPage;
+```
+
+</CodeSurfer>
+
+---
+
+<CodeSurfer theme={shadesOfPurple}>
+
+```js
+type UserData = {
+  user: IUserdata | null
+  rolesActives: any
+  setUserData: (users: IUserdata | null) => void
+  setRolesActives: (roles: string[]) => void
+}
+
+const useUserStore = create<UserData>()(
+  devtools(
+    persist(
+      set => ({
+        user: null,
+        rolesActives: [],
+        setRolesActives: (roles: string[] | null | undefined) => set({ rolesActives: roles }),
+        setUserData: (users: IUserdata) => set({ user: users })
+      }),
+      {
+        name: 'jit-user',
+        onRehydrateStorage: () => (state: any) => {
+          if (state) {
+            state.hasHydrated = true
+          }
+        }
+      }
+    )
+  )
+)
+
+export default useUserStore
+```
+
+```js
+const UserPage: NextPage = () => {
+  // Zustand hooks
+  const user = useUserStore((state) => state.user);
+
+  return <div> Name {user.name} </div>;
+};
+
+export default UserPage;
+```
+
+</CodeSurfer>
+
+---
+
+# Thank you!
+
+- Hosea Simanjuntak
+
+- Apsyadira
+
+- Dwi Rizky Manggala Putra
+
+---
+
+# FAQ
